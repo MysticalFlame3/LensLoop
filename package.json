@@ -1,0 +1,14 @@
+{
+  "name": "lensloop",
+  "version": "1.0.0",
+  "description": "app for watching uploading video",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "Surya Raj",
+  "license": "ISC"
+}
