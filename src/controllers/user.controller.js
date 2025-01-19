@@ -2,10 +2,13 @@ import {asynchandler} from '../utils/asynchandler.js';
 import {ApiError} from "../utils/ApiError.js";
 import {User} from "../models/user.model.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
 
 const registerUser = asynchandler (async (req,res) => {
     const {fullname,email,username,password} = req.body;
     console.log("email",email);
+
+    
 
     if([fullname,email,username,password].some((field)=>
     field?.trim() === "")
@@ -14,9 +17,14 @@ const registerUser = asynchandler (async (req,res) => {
         
     }
 
-    const existedUser = User.findOne({
+    
+    const existedUser = await User.findOne({
         $or:[{username},{email}]
     });
+
+    
+
+
 
     if(existedUser){
         throw new ApiError(409,'username or email already exist');
@@ -37,7 +45,7 @@ const registerUser = asynchandler (async (req,res) => {
 
     }
 
-    const User = await User.create({
+    const newUser = await User.create({
         fullname,
         email,
         avatar:avatar.url,
@@ -47,7 +55,7 @@ const registerUser = asynchandler (async (req,res) => {
 
     })
 
-    const createdUser = await User.findById(User._id).select("-password -refreshToken")
+    const createdUser = await User.findById(newUser._id).select("-password -refreshToken")
 
     if(!createdUser){
         throw new ApiError(500,"something went wrong")
@@ -61,3 +69,5 @@ const registerUser = asynchandler (async (req,res) => {
 })
 
 export {registerUser}
+
+
